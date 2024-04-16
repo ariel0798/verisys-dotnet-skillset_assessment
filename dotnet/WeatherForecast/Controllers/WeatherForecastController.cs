@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.ObjectModel;
+using WeatherForecast.Contracts;
+using WeatherForecast.Extension;
+using WeatherForecast.Interfaces;
 
 namespace WeatherForecast.Controllers;
 
@@ -8,15 +11,18 @@ namespace WeatherForecast.Controllers;
 public class WeatherForecastController : ControllerBase
 {
     private readonly ILogger<WeatherForecastController> _logger;
+    private readonly IWeatherService _weatherService;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    public WeatherForecastController(ILogger<WeatherForecastController> logger, IWeatherService weatherService)
     {
         _logger = logger;
+        _weatherService = weatherService;
     }
 
     [HttpGet]
-    public IEnumerable<WeatherForecast> Get()
+    public async Task<IEnumerable<WeatherForecastResponse>> Get()
     {
-        return ReadOnlyCollection<WeatherForecast>.Empty;
+        var result = await _weatherService.GetForecast();
+        return result.ToWeatherForecastResponse();
     }
 }
