@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  verisys-assessment:
+    build: .
+    container_name: verisys-assessment
+    ports:
+      - "5074:5074"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:5074
